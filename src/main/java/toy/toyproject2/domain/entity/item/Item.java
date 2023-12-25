@@ -18,7 +18,26 @@ public class Item {
     private String name;
     private int price;
     private int stockQuantity;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public Item(String name, int price, int stockQuantity, Member member) {
+        this.name = name;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        addMember(member);
+    }
+
+    public void addMember(Member member) {
+        this.member = member;
+        member.getItems().add(this);
+    }
+
+
+    public void edit(String name, int price, int stockQuantity, String author, String isbn) {
+        this.name = name;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+    }
 }

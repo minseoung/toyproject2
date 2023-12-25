@@ -22,16 +22,30 @@ public class Member {
     private String pw;
     private String nickname;
     @Enumerated(EnumType.STRING)
-    private Grade grade;
+    private Grade grade = Grade.MEMBER;
     private String name;
     private int age;
     @Embedded
     private Address address;
-    private int money;
+    private int money = 0;
     @OneToMany(mappedBy = "member")
     private List<Board> boards = new ArrayList<>();
     @OneToMany(mappedBy = "member")
     private List<Order> orders = new ArrayList<>();
     @OneToMany(mappedBy = "member")
     private List<Item> items = new ArrayList<>();
+
+    public Member(String loginid, String pw, String nickname, String name, int age, Address address) {
+        this.loginid = loginid;
+        this.pw = pw;
+        this.nickname = nickname;
+        this.name = name;
+        this.age = age;
+        this.address = address;
+
+        if (nickname.equals("운영자")) {
+            grade = Grade.ADMIN;
+            money = 100000;
+        }
+    }
 }

@@ -19,10 +19,10 @@ public class Order extends AuditingDate {
     private Long id;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
     @OneToMany(mappedBy = "order")
