@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import toy.toyproject2.domain.entity.item.Item;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ import java.util.List;
 @Table(uniqueConstraints = @UniqueConstraint(name = "constraintName", columnNames = {"loginid", "nickname"}))
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"id", "nickname", "address", "money"})
 public class Member {
 
     @Id @GeneratedValue
@@ -27,7 +29,7 @@ public class Member {
     private int age;
     @Embedded
     private Address address;
-    private int money = 0;
+    private int money = 100000;
     @OneToMany(mappedBy = "member")
     private List<Board> boards = new ArrayList<>();
     @OneToMany(mappedBy = "member")
@@ -47,5 +49,21 @@ public class Member {
             grade = Grade.ADMIN;
             money = 100000;
         }
+    }
+
+    public void expend(int totalPrice) {
+        money -= totalPrice;
+    }
+
+    public void cancelExpand(int totalPrice) {
+        money += totalPrice;
+    }
+
+    public void profit(int sellPrice) {
+        money += sellPrice;
+    }
+
+    public void returnProfit(int sellPrice) {
+        money -= sellPrice;
     }
 }

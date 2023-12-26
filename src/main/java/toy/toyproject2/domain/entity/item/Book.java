@@ -1,11 +1,14 @@
 package toy.toyproject2.domain.entity.item;
 
 import jakarta.persistence.Entity;
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import toy.toyproject2.domain.entity.Member;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Book extends Item{
     private String author;
     private String isbn;

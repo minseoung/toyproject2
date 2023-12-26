@@ -4,10 +4,12 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {"address", "deliveryStatus"})
 public class Delivery {
     @Id
     @GeneratedValue
@@ -19,4 +21,13 @@ public class Delivery {
     private DeliveryStatus deliveryStatus;
     @OneToOne(mappedBy = "delivery")
     private Order order;
+
+    public Delivery(Address address) {
+        this.address = address;
+        this.deliveryStatus = DeliveryStatus.READY;
+    }
+
+    public void addOrder(Order order) {
+        this.order = order;
+    }
 }

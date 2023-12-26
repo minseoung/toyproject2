@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 import toy.toyproject2.domain.entity.Member;
 
 @Entity
@@ -11,6 +12,7 @@ import toy.toyproject2.domain.entity.Member;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
+@ToString(of = {"id", "name", "price", "stockQuantity"})
 public class Item {
     @Id @GeneratedValue
     @Column(name = "item_id")
@@ -39,5 +41,13 @@ public class Item {
         this.name = name;
         this.price = price;
         this.stockQuantity = stockQuantity;
+    }
+
+    public void removeStock(int orderCount) {
+        this.stockQuantity -= orderCount;
+    }
+
+    public void addStock(int orderCount) {
+        this.stockQuantity += orderCount;
     }
 }
