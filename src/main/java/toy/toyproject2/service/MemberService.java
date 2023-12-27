@@ -7,11 +7,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import toy.toyproject2.controller.dto.MemberAddRequest;
+import toy.toyproject2.controller.dto.MemberLoginRequest;
 import toy.toyproject2.domain.entity.Member;
 import toy.toyproject2.domain.repository.MemberRepository;
-import toy.toyproject2.exception.DuplicatedLonginIdException;
-import toy.toyproject2.exception.DuplicatedNicknameException;
-import toy.toyproject2.exception.LoginFailedException;
+import toy.toyproject2.exception.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,14 +34,24 @@ public class MemberService {
         return memberRepository.findById(id);
     }
 
+    public Member findMember(Long id) {
+        Optional<Member> optionalMember = memberRepository.findById(id);
+        if (optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+            return member;
+        } else {
+            throw new NotExistMemberException("존재하지 않는 회원입니다.");
+        }
+    }
+
     public Page<Member> findMembers(Pageable pageable) {
         return memberRepository.findAll(pageable);
     }
 
-    public Long login(String loginid, String pw) {
+    public Long login(MemberLoginRequest loginRequest) {
         log.info("로그인 로직 실행");
-        Member findMember = memberRepository.findByLoginid(loginid);
-        if (findMember == null || !findMember.getPw().equals(pw)) {
+        Member findMember = memberRepository.findByLoginid(loginRequest.getLoginid());
+        if (findMember == null || !findMember.getPw().equals(loginRequest.getPw())) {
             throw new LoginFailedException("아이디 또는 비밀번호가 올바르지 않습니다.");
         } else {
             return findMember.getId();

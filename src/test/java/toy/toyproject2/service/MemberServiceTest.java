@@ -14,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import toy.toyproject2.controller.dto.MemberAddRequest;
+import toy.toyproject2.controller.dto.MemberLoginRequest;
 import toy.toyproject2.domain.entity.Address;
 import toy.toyproject2.domain.entity.Member;
 import toy.toyproject2.domain.repository.MemberRepository;
@@ -78,7 +79,8 @@ class MemberServiceTest {
         em.flush();
         em.clear();
         //when
-        Long loginMemberId = memberService.login("test1", "1234");
+        MemberLoginRequest loginRequest = new MemberLoginRequest("test1", "1234");
+        Long loginMemberId = memberService.login(loginRequest);
         //then
         assertThat(loginMemberId).isEqualTo(savedMemberId);
     }
@@ -94,10 +96,12 @@ class MemberServiceTest {
         //when
         //then
         assertThatThrownBy(() -> {
-            Long loginMemberId1 = memberService.login("test2", "1234");
+            MemberLoginRequest loginRequest = new MemberLoginRequest("test2", "1234");
+            Long loginMemberId1 = memberService.login(loginRequest);
         }).isInstanceOf(LoginFailedException.class);
         assertThatThrownBy(() -> {
-            Long loginMemberId2 = memberService.login("test1", "5555");
+            MemberLoginRequest loginRequest = new MemberLoginRequest("test1", "5555");
+            Long loginMemberId2 = memberService.login(loginRequest);
         }).isInstanceOf(LoginFailedException.class);
     }
 

@@ -1,10 +1,13 @@
 package toy.toyproject2.controller.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import toy.toyproject2.domain.entity.Address;
 
 @Data
+@NoArgsConstructor
 public class MemberAddRequest {
 
     @NotBlank
@@ -15,9 +18,8 @@ public class MemberAddRequest {
     private String nickname;
     @NotBlank
     private String name;
-    @NotBlank
+    @NotNull
     private int age;
-    @NotBlank
     private Address address;
 
     public MemberAddRequest(String loginid, String pw, String nickname, String name, int age, Address address) {
