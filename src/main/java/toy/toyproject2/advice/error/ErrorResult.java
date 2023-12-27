@@ -1,13 +1,14 @@
-package toy.toyproject2.controller.dto;
+package toy.toyproject2.advice.error;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberLoginRequest {
-    private String loginid;
-    private String pw;
+public class ErrorResult<T> {
+    private T error;
 }

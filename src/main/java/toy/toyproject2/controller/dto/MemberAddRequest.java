@@ -19,7 +19,8 @@ public class MemberAddRequest {
     @NotBlank
     private String name;
     @NotNull
-    private int age;
+    private Integer age;
+    @NotNull
     private Address address;
 
     public MemberAddRequest(String loginid, String pw, String nickname, String name, int age, Address address) {
