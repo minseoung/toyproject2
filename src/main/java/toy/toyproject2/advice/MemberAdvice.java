@@ -7,11 +7,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import toy.toyproject2.advice.error.ErrorResult;
-import toy.toyproject2.exception.DuplicatedLonginIdException;
-import toy.toyproject2.exception.DuplicatedNicknameException;
-import toy.toyproject2.exception.LoginFailedException;
-import toy.toyproject2.exception.NotExistMemberException;
+import toy.toyproject2.advice.errorDto.ErrorResult;
+import toy.toyproject2.exception.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,7 +43,7 @@ public class MemberAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST) //만약 나이에 문자를 입력하면 이 예외가 뜨길래 잡긴했는데 문제는 어떻게 처리해야할지다.
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ErrorResult<String> notParseJasonExHandler(HttpMessageNotReadableException e) {
-        return new ErrorResult<>(e.getMessage());
+        return new ErrorResult<>("숫자입력칸에 문자를 입력하셨습니다.");
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -58,6 +55,12 @@ public class MemberAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(LoginFailedException.class)
     public ErrorResult<String> loginFailExHandler(LoginFailedException e) {
+        return new ErrorResult<>(e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NotLoginedException.class)
+    public ErrorResult<String> notLoginExHandler(NotLoginedException e) {
         return new ErrorResult<>(e.getMessage());
     }
 

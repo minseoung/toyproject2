@@ -3,10 +3,13 @@ package toy.toyproject2.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import toy.toyproject2.controller.dto.MemberAddRequest;
+import toy.toyproject2.controller.dto.MemberListRequest;
 import toy.toyproject2.controller.dto.MemberLoginRequest;
 import toy.toyproject2.domain.entity.Member;
 import toy.toyproject2.domain.repository.MemberRepository;
@@ -42,6 +45,11 @@ public class MemberService {
         } else {
             throw new NotExistMemberException("존재하지 않는 회원입니다.");
         }
+    }
+
+    public Page<Member> findMemberList(MemberListRequest listRequest) {
+        PageRequest pageRequest = PageRequest.of(listRequest.getPage(), listRequest.getSize(), Sort.by(Sort.Direction.ASC, "id"));
+        return memberRepository.findAll(pageRequest);
     }
 
     public Page<Member> findMembers(Pageable pageable) {

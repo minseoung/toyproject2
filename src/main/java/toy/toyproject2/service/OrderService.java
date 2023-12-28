@@ -13,6 +13,7 @@ import toy.toyproject2.domain.repository.ItemRepository;
 import toy.toyproject2.domain.repository.MemberRepository;
 import toy.toyproject2.domain.repository.OrderRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -58,11 +59,40 @@ public class OrderService {
         }
     }
 
+    public void cancelOrderV2(Long orderId, Long loginMemberId) {
+        Optional<Order> optionalOrder = orderRepository.findById(orderId);
+        if (optionalOrder.isPresent()) {
+            Order findOrder = optionalOrder.get();
+            if (!findOrder.getMember().getId().equals(loginMemberId)) {
+                throw new RuntimeException("본인이 주문한 상품만 열람 및 관리가능합니다.");
+            }
+            findOrder.cancel();
+        }
+    }
+
     public Optional<Order> findOne(Long id) {
         return orderRepository.findById(id);
     }
 
+    public Order findOrder(Long id, Long loginMemberId) {
+        Optional<Order> optionalOrder = orderRepository.findOrderById(id);
+        if (optionalOrder.isPresent()) {
+            Order order = optionalOrder.get();
+            if (!order.getMember().getId().equals(loginMemberId)) {
+                throw new RuntimeException("본인이 주문한게 아니면 열람 및 관리가 불가능합니다.");
+            }
+            return order;
+        } else {
+            throw new RuntimeException("해당 주문은 존재하지않습니다.");
+        }
+    }
+
     public Page<Order> findOrders(Pageable pageable) {
         return orderRepository.findAll(pageable);
+    }
+
+    public List<Order> findOrderList() {
+        List<Order> orders = orderRepository.findOrderList();
+        return orders;
     }
 }

@@ -1,8 +1,10 @@
 package toy.toyproject2.controller.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class ItemBookEditRequest {
     private String name;
     private int price;

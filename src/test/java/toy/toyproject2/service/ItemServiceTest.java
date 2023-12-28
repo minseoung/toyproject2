@@ -17,6 +17,7 @@ import toy.toyproject2.controller.dto.ItemBookAddRequest;
 import toy.toyproject2.controller.dto.ItemBookEditRequest;
 import toy.toyproject2.controller.dto.MemberAddRequest;
 import toy.toyproject2.domain.entity.Address;
+import toy.toyproject2.domain.entity.item.Book;
 import toy.toyproject2.domain.entity.item.Item;
 
 import java.util.List;
@@ -46,7 +47,7 @@ class ItemServiceTest {
         em.flush();
         em.clear();
         //then
-        Item findItem = itemService.findOne(savedItemId).get();
+        Book findItem = (Book) itemService.findOne(savedItemId).get();
         assertThat(findItem.getId()).isEqualTo(savedItemId);
         assertThat(findItem.getName()).isEqualTo("이것이 JAVA다");
     }
