@@ -1,8 +1,10 @@
 package toy.toyproject2.controller.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class BoardEditRequest {
     private String title;
     private String content;

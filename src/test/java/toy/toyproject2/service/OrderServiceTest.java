@@ -14,11 +14,13 @@ import org.springframework.transaction.annotation.Transactional;
 import toy.toyproject2.controller.dto.ItemBookAddRequest;
 import toy.toyproject2.controller.dto.MemberAddRequest;
 import toy.toyproject2.controller.dto.OrderAddRequest;
+import toy.toyproject2.controller.dto.OrderAddResponse;
 import toy.toyproject2.domain.entity.Address;
 import toy.toyproject2.domain.entity.Member;
 import toy.toyproject2.domain.entity.Order;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -145,5 +147,15 @@ class OrderServiceTest {
         System.out.println("member1 = " + member1);
         System.out.println("member2 = " + member2);
 
+    }
+
+    @Test
+    @DisplayName("주문을 가져올때 일대다 까지")
+    void findOrderWithNList() {
+        List<Order> orders = orderService.findOrderList();
+        List<OrderAddResponse> collect = orders.stream().map(order -> new OrderAddResponse(order)).collect(Collectors.toList());
+        for (OrderAddResponse orderAddResponse : collect) {
+            System.out.println("orderAddResponse = " + orderAddResponse);
+        }
     }
 }

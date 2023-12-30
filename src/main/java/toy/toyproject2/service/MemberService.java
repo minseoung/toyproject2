@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import toy.toyproject2.controller.dto.MemberAddRequest;
 import toy.toyproject2.controller.dto.MemberListRequest;
 import toy.toyproject2.controller.dto.MemberLoginRequest;
+import toy.toyproject2.controller.dto.MemberResponse;
 import toy.toyproject2.domain.entity.Member;
 import toy.toyproject2.domain.repository.MemberRepository;
 import toy.toyproject2.exception.*;
@@ -52,6 +53,11 @@ public class MemberService {
         return memberRepository.findAll(pageRequest);
     }
 
+    public List<Member> findMemberWithBoard() {
+        List<Member> result = memberRepository.findMemberListWithBoards();
+        return result;
+    }
+
     public Page<Member> findMembers(Pageable pageable) {
         return memberRepository.findAll(pageable);
     }
@@ -78,5 +84,12 @@ public class MemberService {
             log.info("닉네임 중복 오류 발생");
             throw new DuplicatedNicknameException("이미 사용중인 닉네임 입니다.");
         }
+    }
+
+    public Page<MemberResponse> findMembersWithBoards(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<Member> memberPage = memberRepository.findAll(pageRequest);
+        Page<MemberResponse> result = memberPage.map(member -> new MemberResponse(member));
+        return result;
     }
 }

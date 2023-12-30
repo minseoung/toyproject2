@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -62,6 +63,20 @@ public class MemberController {
     public Result<MemberAddResponse> member(@PathVariable(name = "memberId") Long memberId) {
         Member findMember = memberService.findMember(memberId);
         return new Result<>(new MemberAddResponse(findMember));
+    }
+
+    @GetMapping("/member/listV2")
+    public Result<List<MemberResponse>> memberWithBoards() {
+        List<Member> members = memberService.findMemberWithBoard();
+        List<MemberResponse> collect = members.stream().map(member -> new MemberResponse(member)).collect(Collectors.toList());
+        return new Result<>(collect);
+    }
+
+    @GetMapping("/member/listV3")
+    public Result<Page<MemberResponse>> membersWithBoardsV2(@RequestParam(name = "page") int page,
+                                                            @RequestParam(name = "size") int size) {
+        Page<MemberResponse> result = memberService.findMembersWithBoards(page, size);
+        return new Result<>(result);
     }
 
 }

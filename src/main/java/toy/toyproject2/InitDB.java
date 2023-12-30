@@ -3,12 +3,18 @@ package toy.toyproject2;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import toy.toyproject2.controller.dto.BoardAddRequest;
 import toy.toyproject2.controller.dto.ItemBookAddRequest;
 import toy.toyproject2.controller.dto.MemberAddRequest;
-import toy.toyproject2.domain.entity.Address;
+import toy.toyproject2.domain.entity.*;
+import toy.toyproject2.domain.entity.item.Book;
 import toy.toyproject2.domain.repository.MemberRepository;
+import toy.toyproject2.domain.repository.OrderRepository;
+import toy.toyproject2.service.BoardService;
 import toy.toyproject2.service.ItemService;
 import toy.toyproject2.service.MemberService;
+import toy.toyproject2.service.OrderService;
 
 @Component
 @RequiredArgsConstructor
@@ -16,6 +22,8 @@ public class InitDB {
 
         private final MemberService memberService;
         private final ItemService itemService;
+        private final OrderService orderService;
+        private final BoardService boardService;
     @PostConstruct
     public void init() {
         MemberAddRequest request1 = new MemberAddRequest("dbwotjr", "1234", "메뚜재석", "유재석", 53, new Address("서울", "마포대로", "1111"));
@@ -47,5 +55,17 @@ public class InitDB {
         ItemBookAddRequest addRequest9 = new ItemBookAddRequest("빵집운영법", 17000, 10, "노홍철", "951-31");
         Long savedItemId8 = itemService.addItem(addRequest8, savedMemberId4);
         Long savedItemId9 = itemService.addItem(addRequest9, savedMemberId5);
+
+        orderService.init();
+        BoardAddRequest addRequest11 = new BoardAddRequest("박명수 첫번째 게시물 테스트", "테스트 입니당.");
+        BoardAddRequest addRequest22 = new BoardAddRequest("박명수 두번째 게시물 테스트", "테스트 입니당.");
+        BoardAddRequest addRequest33 = new BoardAddRequest("박명수 세번째 게시물 테스트", "테스트 입니당.");
+        BoardAddRequest addRequest44 = new BoardAddRequest("유재석 첫번째 게시물 테스트", "테스트 입니당.");
+        BoardAddRequest addRequest55 = new BoardAddRequest("유재석 두번째 게시물 테스트", "테스트 입니당.");
+        Long savedBoardId1 = boardService.post(addRequest11, savedMemberId2);
+        Long savedBoardId2 = boardService.post(addRequest22, savedMemberId2);
+        Long savedBoardId3 = boardService.post(addRequest33, savedMemberId2);
+        Long savedBoardId4 = boardService.post(addRequest44, savedMemberId1);
+        Long savedBoardId5 = boardService.post(addRequest55, savedMemberId1);
     }
 }

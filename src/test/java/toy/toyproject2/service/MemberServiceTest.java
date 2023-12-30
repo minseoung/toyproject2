@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 import toy.toyproject2.controller.dto.MemberAddRequest;
 import toy.toyproject2.controller.dto.MemberLoginRequest;
+import toy.toyproject2.controller.dto.MemberResponse;
 import toy.toyproject2.domain.entity.Address;
 import toy.toyproject2.domain.entity.Member;
 import toy.toyproject2.domain.repository.MemberRepository;
@@ -24,6 +25,7 @@ import toy.toyproject2.exception.LoginFailedException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -124,4 +126,16 @@ class MemberServiceTest {
             System.out.println("member = " + member.getLoginid());
         }
     }
+
+    @Test
+    @DisplayName("회원을 가져올때 일대다 관계인 보드까지")
+    void memberWithBoardsList() {
+        List<Member> members = memberService.findMemberWithBoard();
+        List<MemberResponse> collect = members.stream().map(member -> new MemberResponse(member)).collect(Collectors.toList());
+        for (MemberResponse memberResponse : collect) {
+            System.out.println("memberResponse = " + memberResponse);
+        }
+    }
+
+
 }

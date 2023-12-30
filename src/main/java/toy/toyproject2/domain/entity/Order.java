@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.hibernate.annotations.BatchSize;
 import toy.toyproject2.domain.entity.auditing.AuditingDate;
 import toy.toyproject2.exception.CanNotCancelOrderException;
 
@@ -22,12 +23,15 @@ public class Order extends AuditingDate {
     private Long id;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "delivery_id")
     private Delivery delivery;
+
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
@@ -37,6 +41,9 @@ public class Order extends AuditingDate {
         this.orderStatus = OrderStatus.ORDER;
         for (OrderItem orderItem : orderItems) {
             addOrderItem(orderItem);
+        }
+        if (member.getMoney() < getTotalPrice()) {
+            throw new RuntimeException("잔액이 부족합니다.");
         }
 
         member.expend(getTotalPrice());
